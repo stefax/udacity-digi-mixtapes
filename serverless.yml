@@ -1,0 +1,34 @@
+service:
+  name: serverless-digi-mixtapes
+
+plugins:
+  - serverless-webpack
+  - serverless-iam-roles-per-function
+  - serverless-reqvalidator-plugin
+  - serverless-aws-documentation
+  - serverless-plugin-canary-deployments
+
+# Enable individual packaging for better performance of each lambda function
+# package:
+#   individually: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'eu-west-1'}
+
+  # More details on how to enable AWS X-Ray for distributed tracing, see:
+  # https://www.youtube.com/watch?v=Qj1w2Qbt99o & https://www.youtube.com/watch?v=QTlB32T6cVg & https://www.youtube.com/watch?v=dv9EZRGhMX4
+  tracing:
+    lambda: true
+    apiGateway: true
+
+  environment:
+
+custom:
+
+functions:
+
+resources:
