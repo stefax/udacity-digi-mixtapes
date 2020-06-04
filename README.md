@@ -34,22 +34,44 @@ This repository contains the backend part of the application.
 - `DELETE /mixtapes/<mixtape-id>` Delete a mixtape by id
 
 ### Songs
-- `GET /mixtapes/<mixtape-id>/songs` List all songs for a mixtape
-- `POST /mixtapes/<mixtape-id>/songs` Create and add a song to a mixtape
-- `PATCH /mixtapes/<mixtape-id>/songs/<song-id>` Update a song by id (e.g. the name)
+- `GET /mixtapes/<mixtape-id>/songs` Get list of all songs for a mixtape and the mixtape's details 
+- `POST /mixtapes/<mixtape-id>/songs` Create a song in a mixtape (added to the end)
 - `DELETE /mixtapes/<mixtape-id>/songs/<song-id>` Delete a song by id
 
 ## 2.3 Testing
 As there is no front-end implementation in this repository, the API can be tested with [Postman](https://www.postman.com/downloads/). 
 
-The Postman collection contains sample requests for all relevant API calls. There are two collection variables defined:
-- **baseUrl**: `https://<api-id>.execute-api.<region>.amazonaws.com/dev/` - already set for the currently deployed app on AWS
-- **authToken**: the JWT token required for all API calls - already set with a valid token for an example client; for obtaining a new JWT token, see 2.3.1
+The [Postman collection](./Digi-Mixtapes-API.postman_collection.json) contains sample requests for all relevant API calls. There are two collection variables defined:
+- **baseUrl**: `https://<api-id>.execute-api.<region>.amazonaws.com/dev/` - the initial value is already set for the currently deployed app on AWS
+- **authToken**: the JWT token required for all API calls - the initial value is already set with a valid token for an example user; for obtaining a new JWT token, see 2.3.1
 
 ### 2.3.1 Obtaining New JWT Token
-Postman allows for using OAuth2 authorization with identity providers. The Digi Mixtapes app uses Auth0. A JWT token can be obtained through authenticating with Auth0 as follows:
+Without a front-end implementation in this repository which would allow a user to login and obtain a JWT token in the browser, we need to login and obtain a JWT token in a different way. Postman allows for using OAuth2 authorization with identity providers (the Digi Mixtapes app uses Auth0). To obtain a new JWT token authenticating with Auth0 go through these steps:
 
-
+- Edit the Postman Digi Mixtapes collection by clicking the three dots and Edit  
+  ![](img/postman-1-edit-collection.png)
+- Go to the Authorization tab
+- Temporarily change the type from **Bearer Token** to **OAuth 2.0**
+- On the right click **Get New Access Token**  
+  ![](img/postman-2-get-new-access-token.png)
+- In the form that opens in a small window enter the following details:
+    - **Token Name**: JWT Token from Auth0
+    - **Grant Type**: Authorization Code
+    - **Callback URL**: https://oauth.pstmn.io/v1/callback
+    - **Authorize using browser**: leave unchecked
+    - **Auth URL**: https://modul1-udacity-todo-app-dev.eu.auth0.com/authorize
+    - **Access Token URL**: https://modul1-udacity-todo-app-dev.eu.auth0.com/oauth/token
+    - **ClientID**: oCOdUYfErstGFf4MMN7XFU31BQ8EATBY
+    - **Client Secret**: leave empty
+    - **Scope**: openid email profile
+    - **State**: any random string or empty
+    - **Client Authentication**: Send as Basic Auth header
+- Click **Request Token**  
+  ![](img/postman-3-request-token.png)
+- Copy the **id_token**, which is the JWT token
+- Close the small window
+- Set the type back from **OAuth 2.0** to **Bearer Token**
+- Go to Variables and update the current value of authToken with the copied JWT token
 
 
 # 3 Installing & Running The App
