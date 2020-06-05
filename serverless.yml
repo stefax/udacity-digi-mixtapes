@@ -34,7 +34,7 @@ provider:
     DYNAMO_DB_INDEX_TYPE_MIXTAPE_SONG: TypeMixtapeSongIndex
     S3_BUCKET_MIXTAPE_SONGS: serverless-digi-mixtapes-app-93165037-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
-    JWKS_URL: https://modul1-udacity-todo-app-dev.eu.auth0.com/.well-known/jwks.json
+    JWKS_URL: https://digi-mixtapes.eu.auth0.com/.well-known/jwks.json
 
 
 custom:
@@ -175,7 +175,7 @@ functions:
         Resource: "*"
 
   GetMixtapeSongs:
-    handler: src/lambda/http/getMixtapeSongs.handler
+    handler: src/lambda/http/getMixtapeWithSongs.handler
     events:
       - http:
           method: get
@@ -250,7 +250,7 @@ functions:
     events:
       - http:
           method: post
-          path: mixtapes/{mixtapeId}/songs/{songId}/upload
+          path: mixtapes/{mixtapeId}/songs/{songId}/upload-url
           cors: true
           authorizer: Auth
     iamRoleStatements:

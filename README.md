@@ -36,6 +36,7 @@ This repository contains the backend part of the application.
 ### Songs
 - `GET /mixtapes/<mixtape-id>/songs` Get list of all songs for a mixtape and the mixtape's details 
 - `POST /mixtapes/<mixtape-id>/songs` Create a song in a mixtape (added to the end)
+- `POST /mixtapes/<mixtape-id>/songs/<song-id>/upload-url` Obtain a signed url to upload a song into the S3 bucket
 - `DELETE /mixtapes/<mixtape-id>/songs/<song-id>` Delete a song by id
 
 ## 2.3 Testing
@@ -59,9 +60,9 @@ Without a front-end implementation in this repository which would allow a user t
     - **Grant Type**: Authorization Code
     - **Callback URL**: https://oauth.pstmn.io/v1/callback
     - **Authorize using browser**: leave unchecked
-    - **Auth URL**: https://modul1-udacity-todo-app-dev.eu.auth0.com/authorize
-    - **Access Token URL**: https://modul1-udacity-todo-app-dev.eu.auth0.com/oauth/token
-    - **ClientID**: oCOdUYfErstGFf4MMN7XFU31BQ8EATBY
+    - **Auth URL**: https://digi-mixtapes.eu.auth0.com/authorize
+    - **Access Token URL**: https://digi-mixtapes.eu.auth0.com/oauth/token
+    - **ClientID**: ZSozLg2IKNkF9kAvLqQord6j5yWPtW9L
     - **Client Secret**: leave empty
     - **Scope**: openid email profile
     - **State**: any random string or empty
