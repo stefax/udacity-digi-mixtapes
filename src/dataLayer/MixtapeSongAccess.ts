@@ -39,7 +39,7 @@ export class MixtapeSongAccess {
       .query({
         TableName: this.mixtapesTable,
         IndexName: this.mixtapeTypeSongIndex,
-        KeyConditionExpression: 'creatorUserId = :userId AND mixtapeIdTypeSongCreatedAt BEGINS_WITH :mixtapeId',
+        KeyConditionExpression: 'creatorUserId = :userId and begins_with(mixtapeIdTypeSongCreatedAt, :mixtapeId)',
         ExpressionAttributeValues: {
           ':userId': userId,
           ':mixtapeId': mixtapeId
