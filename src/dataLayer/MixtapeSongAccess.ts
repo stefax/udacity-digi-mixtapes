@@ -95,7 +95,7 @@ export class MixtapeSongAccess {
    * Delete a song from a mixtape if it belongs to the logged in user.
    */
   async deleteSongIfOwner(mixtapeId: string, songId: string, deletingUserId: string): Promise<void> {
-    logger.debug('Delete a song from a mixtape if it belongs to the logged in user.')
+    logger.debug('Remove a song from a mixtape if it belongs to the logged in user.')
 
     await this.docClient.delete({
       TableName: this.mixtapesTable,
