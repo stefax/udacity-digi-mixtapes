@@ -8,6 +8,15 @@ plugins:
   - serverless-reqvalidator-plugin
   - serverless-aws-documentation
   - serverless-plugin-canary-deployments
+  # SERVERLESS OFFLINE: in order to use the serverless configuration locally/offline, uncomment the serverless-offline
+  # plugin and search for all SERVERLESS OFFLINE comments
+  # Run the application like this: sls offline
+  - serverless-offline
+  # SERVERLESS OFFLINE: As this configuration contains dynamodb we need the following plugin as well to run it locally
+  # in order to work and not have an error like "Error: Unable to start DynamoDB Local process!", java needs to be
+  # installed locally and in your path
+  # You need to install and start the database BEFORE calling "sls offline" like this: sls dynamodb install and sls dynamodb start
+  - serverless-dynamodb-local
 
 
 # Enable individual packaging for better performance of each lambda function
@@ -18,15 +27,18 @@ plugins:
 provider:
   name: aws
   runtime: nodejs12.x
-
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-west-1'}
 
   # More details on how to enable AWS X-Ray for distributed tracing, see:
   # https://www.youtube.com/watch?v=Qj1w2Qbt99o & https://www.youtube.com/watch?v=QTlB32T6cVg & https://www.youtube.com/watch?v=dv9EZRGhMX4
-  tracing:
-    lambda: true
-    apiGateway: true
+  # SERVERLESS OFFLINE: to easily use "sls offline", disable tracing doing the following steps:
+  # - comment the "tracing" configuration in the following lines
+  # - replace all XAWS function calls with AWS in your code
+  # - comment out the XAWS imports and the code where AWS is wrapped with XAWS
+  #tracing:
+  #  lambda: true
+  #  apiGateway: true
 
   environment:
     DYNAMO_DB_TABLE_MIXTAPE: DigiMixtapes-${self:provider.stage}
@@ -38,14 +50,18 @@ provider:
 
 
 custom:
-#  serverless-offline:
-#    port: 3003
-#
-#  dynamodb:
-#    start:
-#      port: 8000
-#      inMemory: true
-#      migrate: true
+  # SERVERLESS OFFLINE: to use "sls offline", uncomment "serverless-offline" and "dynamodb" sections
+  serverless-offline:
+    port: 3003
+
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      region: ${self:provider.region}
+    stages:
+      - dev
 
   documentation:
     api:
@@ -174,7 +190,7 @@ functions:
         Effect: Allow
         Resource: "*"
 
-  GetMixtapeSongs:
+  GetSongs:
     handler: src/lambda/http/getMixtapeWithSongs.handler
     events:
       - http:
@@ -196,7 +212,7 @@ functions:
           - xray:PutTelemetryRecords
         Effect: Allow
         Resource: "*"
-  CreateMixtapeSong:
+  CreateSong:
     handler: src/lambda/http/createMixtapeSong.handler
     events:
       - http:
@@ -224,7 +240,7 @@ functions:
   #      type: Linear10PercentEvery1Minute
   #      alias: Live
 
-  DeleteMixtapeSong:
+  DeleteSong:
     handler: src/lambda/http/deleteMixtapeSong.handler
     events:
       - http:
@@ -245,7 +261,9 @@ functions:
         Effect: Allow
         Resource: "*"
 
-  GenerateSongUploadUrl:
+  # E.g. here we use the function name GenUploadUrl instead of the longer but more expressive GenerateSongUploadUrl in
+  # order to avoid errors of too long roleNames, see https://github.com/serverless/serverless/issues/2856
+  GenUploadUrl:
     handler: src/lambda/http/generateSongUploadUrl.handler
     events:
       - http:

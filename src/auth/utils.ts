@@ -28,9 +28,8 @@ export function getTokenFromAuthHeader(authHeader: string): string {
     throw new Error('Invalid authentication header')
 
   const split = authHeader.split(' ')
-  const token = split[1]
 
-  return token
+  return split[1]
 }
 
 /**

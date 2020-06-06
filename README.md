@@ -82,6 +82,7 @@ Without a front-end implementation in this repository which would allow a user t
 - Serverless is installed (check with `serverless version` or short `sls version`)
 - Node.js & npm are installed (check with `node -v` and `npm -v`)
 - Sufficient rights to an AWS account and to the AWS Management Console
+- If the serverless app should be run offline, java runtime environment needs to be installed and in the path (`java --version`)
 
 ## 3.2 Commands
 
@@ -110,6 +111,9 @@ If the serverless command fails because of the wrong user, provide the profile e
 sls deploy -v --aws-profile serverless
 ```
 
+**Note:** Serverless Framework doesn't create the services directly in AWS but creates a [CloudFormation](https://aws.amazon.com/cloudformation/) template. From this template a CloudFormation stack is created which contains all the services.  
+If you want to inspect what's created, you can do so using AWS console. And if anything goes wrong, you can also check the related CloudFormation stack in AWS Management Console.
+
 ### Update
 
 To update the app, run the same command:
@@ -126,4 +130,20 @@ To remove all functions, resources (DynamoDB tables, S3 buckets), roles, etc., r
 sls remove -v
 ```
 
-*Serverless Framework doesn't create the services directly in AWS but creates a [CloudFormation](https://aws.amazon.com/cloudformation/) template. From this template a CloudFormation stack is created and this contains all the services. So, if anything goes wrong, you can always still go into the AWS Management Console and check the related CloudFormation stack.*
+### Running The App Locally/Offline
+
+See the "SERVERLESS OFFLINE" comments in [serverless.yml](./serverless.yml) and prepare the code.
+
+**Install and run DynamoDB locally**  
+Note that java runtime needs to be installed and in the path for this to work. 
+
+```
+sls dynamodb install
+sls dynamodb run 
+```
+
+**Run the app locally**
+
+```
+sls offline
+```
