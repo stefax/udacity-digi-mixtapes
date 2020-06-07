@@ -10,8 +10,8 @@ const logger = createLogger('lambda:deleteMixtapeSong')
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.debug('Processing event: ', event)
 
-  const mixtapeId = event.pathParameters.mixtapeId
-  const songId = event.pathParameters.songId
+  const mixtapeId = decodeURI(event.pathParameters.mixtapeId)
+  const songId = decodeURI(event.pathParameters.songId)
   const jwtToken = getTokenFromAuthHeader(event.headers.Authorization)
 
   let statusCode: number = 403

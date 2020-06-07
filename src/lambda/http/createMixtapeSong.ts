@@ -12,7 +12,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   logger.debug('Processing event: ', event)
 
   const mixtapeSongRequest: CreateMixtapeSongRequest = JSON.parse(event.body)
-  const mixtapeId = event.pathParameters.mixtapeId
+  const mixtapeId = decodeURI(event.pathParameters.mixtapeId)
 
   let body: string = ''
   let statusCode: number = 400

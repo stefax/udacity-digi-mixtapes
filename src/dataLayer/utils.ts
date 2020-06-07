@@ -4,9 +4,9 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from "../utils/logger";
 
 // why using require? see https://stackoverflow.com/questions/60207668/error-when-creating-a-dynamodb-document-client-aws-serverless-using-aws-xray-sdk
-// const AWSXRay = require('aws-xray-sdk')
+const AWSXRay = require('aws-xray-sdk')
 
-// const XAWS = AWSXRay.captureAWS(AWS)
+const XAWS = AWSXRay.captureAWS(AWS)
 const logger = createLogger('dynamodb')
 
 /**
@@ -15,13 +15,13 @@ const logger = createLogger('dynamodb')
 export function createDynamoDBClient(): DocumentClient {
   if (process.env.IS_OFFLINE) {
     logger.info('Creating a local DynamoDB instance')
-    // return new XAWS.DynamoDB.DocumentClient({
-    return new AWS.DynamoDB.DocumentClient({
+    return new XAWS.DynamoDB.DocumentClient({
+    // return new AWS.DynamoDB.DocumentClient({
       region: 'localhost',
       endpoint: 'http://localhost:8000'
     })
   }
 
-  // return new XAWS.DynamoDB.DocumentClient()
-  return new AWS.DynamoDB.DocumentClient()
+  return new XAWS.DynamoDB.DocumentClient()
+  // return new AWS.DynamoDB.DocumentClient()
 }

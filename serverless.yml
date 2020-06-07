@@ -11,12 +11,12 @@ plugins:
   # SERVERLESS OFFLINE: in order to use the serverless configuration locally/offline, uncomment the serverless-offline
   # plugin and search for all SERVERLESS OFFLINE comments
   # Run the application like this: sls offline
-  - serverless-offline
+#  - serverless-offline
   # SERVERLESS OFFLINE: As this configuration contains dynamodb we need the following plugin as well to run it locally
   # in order to work and not have an error like "Error: Unable to start DynamoDB Local process!", java needs to be
   # installed locally and in your path
   # You need to install and start the database BEFORE calling "sls offline" like this: sls dynamodb install and sls dynamodb start
-  - serverless-dynamodb-local
+#  - serverless-dynamodb-local
 
 
 # Enable individual packaging for better performance of each lambda function
@@ -36,9 +36,9 @@ provider:
   # - comment the "tracing" configuration in the following lines
   # - replace all XAWS function calls with AWS in your code
   # - comment out the XAWS imports and the code where AWS is wrapped with XAWS
-  #tracing:
-  #  lambda: true
-  #  apiGateway: true
+  tracing:
+    lambda: true
+    apiGateway: true
 
   environment:
     DYNAMO_DB_TABLE_MIXTAPE: DigiMixtapes-${self:provider.stage}
@@ -51,17 +51,17 @@ provider:
 
 custom:
   # SERVERLESS OFFLINE: to use "sls offline", uncomment "serverless-offline" and "dynamodb" sections
-  serverless-offline:
-    port: 3003
-
-  dynamodb:
-    start:
-      port: 8000
-      inMemory: true
-      migrate: true
-      region: ${self:provider.region}
-    stages:
-      - dev
+#  serverless-offline:
+#    port: 3003
+#
+#  dynamodb:
+#    start:
+#      port: 8000
+#      inMemory: true
+#      migrate: true
+#      region: ${self:provider.region}
+#    stages:
+#      - dev
 
   documentation:
     api:
@@ -179,11 +179,18 @@ functions:
           authorizer: Auth
     iamRoleStatements:
       - Action:
-          - dynamodb:GetItem
-          - dynamodb:DeleteItem
           - s3:DeleteObject
         Effect: Allow
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_MIXTAPE_SONGS}/*
+      - Action:
+          - dynamodb:GetItem
+          - dynamodb:DeleteItem
+        Effect: Allow
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMO_DB_TABLE_MIXTAPE}
+      - Action:
+          - dynamodb:Query
+        Effect: Allow
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMO_DB_TABLE_MIXTAPE}/index/${self:provider.environment.DYNAMO_DB_INDEX_MIXTAPE_TYPE_SONG}
       - Action:
           - xray:PutTraceSegments
           - xray:PutTelemetryRecords
@@ -200,6 +207,7 @@ functions:
           authorizer: Auth
     iamRoleStatements:
       - Action:
+          - dynamodb:GetItem
           - dynamodb:Query
         Effect: Allow
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMO_DB_TABLE_MIXTAPE}
@@ -229,6 +237,7 @@ functions:
     iamRoleStatements:
       - Action:
           - dynamodb:PutItem
+          - dynamodb:GetItem
         Effect: Allow
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMO_DB_TABLE_MIXTAPE}
       - Action:
@@ -250,9 +259,12 @@ functions:
           authorizer: Auth
     iamRoleStatements:
       - Action:
+          - s3:DeleteObject
+        Effect: Allow
+        Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET_MIXTAPE_SONGS}/*
+      - Action:
           - dynamodb:GetItem
           - dynamodb:DeleteItem
-          - s3:DeleteObject
         Effect: Allow
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMO_DB_TABLE_MIXTAPE}
       - Action:

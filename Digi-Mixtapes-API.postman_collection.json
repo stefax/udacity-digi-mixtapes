@@ -1,3 +1,545 @@
 {
-  "TODO": "CREATE IT"
+	"info": {
+		"_postman_id": "2d8b5b95-0137-4ed2-9cde-4691b3f47372",
+		"name": "Digi Mixtapes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Mixtapes",
+			"item": [
+				{
+					"name": "Create mixtape",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "21e22df9-f7e4-46d5-b240-7fcba1b57915",
+								"exec": [
+									"pm.test(\"Correct response code\", () => { pm.response.to.have.status(201); });",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"createdMixtapeSchema\")));",
+									"});",
+									"",
+									"pm.collectionVariables.set(\"latestCreatedMixtapeId\", pm.response.json().item.mixtapeId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"My Favorite Jazz\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dm_baseUrl}}/mixtapes",
+							"host": [
+								"{{dm_baseUrl}}"
+							],
+							"path": [
+								"mixtapes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update mixtape",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e4f0f69b-84da-4f50-8f26-3ccbd03399f1",
+								"exec": [
+									"pm.test(\"Correct response code\", () => { pm.response.to.have.status(204); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"My Favorite Classical Music\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dm_baseUrl}}/mixtapes/{{latestCreatedMixtapeId}}",
+							"host": [
+								"{{dm_baseUrl}}"
+							],
+							"path": [
+								"mixtapes",
+								"{{latestCreatedMixtapeId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all mixtapes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "262cf752-d26e-4142-9561-0f70ed5b7d76",
+								"exec": [
+									"pm.test(\"Correct response code\", () => { pm.response.to.have.status(200); });",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"getMixtapesSchema\")));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dm_baseUrl}}/mixtapes",
+							"host": [
+								"{{dm_baseUrl}}"
+							],
+							"path": [
+								"mixtapes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all mixtapes for second user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7bb1f86a-c0ae-4b55-bff4-fa574fcda2cc",
+								"exec": [
+									"pm.test(\"Correct response code\", () => { pm.response.to.have.status(200); });",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"getMixtapesSchema\")));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{dm_authTokenForSecondUser}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dm_baseUrl}}/mixtapes",
+							"host": [
+								"{{dm_baseUrl}}"
+							],
+							"path": [
+								"mixtapes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete mixtape",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5eb292bf-2fec-47dd-8dbf-42265b190c72",
+								"exec": [
+									"pm.test(\"Correct response code\", () => { pm.response.to.have.status(204); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{dm_baseUrl}}/mixtapes/{{latestCreatedMixtapeId}}",
+							"host": [
+								"{{dm_baseUrl}}"
+							],
+							"path": [
+								"mixtapes",
+								"{{latestCreatedMixtapeId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Songs",
+			"item": [
+				{
+					"name": "Create mixtape to add songs to",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "12547841-df8d-4228-87b6-aba97bfebda4",
+								"exec": [
+									"pm.test(\"Correct response code\", () => { pm.response.to.have.status(201); });",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"createdMixtapeSchema\")));",
+									"});",
+									"",
+									"pm.collectionVariables.set(\"latestCreatedMixtapeId\", pm.response.json().item.mixtapeId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Music to get moving\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dm_baseUrl}}/mixtapes",
+							"host": [
+								"{{dm_baseUrl}}"
+							],
+							"path": [
+								"mixtapes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add song to mixtape",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ada575f7-5a16-4426-a15b-62f81bef10b3",
+								"exec": [
+									"pm.test(\"Correct response code\", () => { pm.response.to.have.status(201); });",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"createdSongSchema\")));",
+									"});",
+									"",
+									"pm.collectionVariables.set(\"latestCreatedSongId\", pm.response.json().item.songId)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Dave Brubeck - Take five\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dm_baseUrl}}/mixtapes/{{latestCreatedMixtapeId}}/songs",
+							"host": [
+								"{{dm_baseUrl}}"
+							],
+							"path": [
+								"mixtapes",
+								"{{latestCreatedMixtapeId}}",
+								"songs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate upload link for song",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "64cd4642-14e5-4486-9393-f740a39de59b",
+								"exec": [
+									"pm.test(\"Correct response code\", () => { pm.response.to.have.status(200); });",
+									"",
+									"pm.test(\"Validate that response contains a url\", () => {",
+									"    pm.expect(pm.response.json().uploadUrl).to.include(\"https\");",
+									"});",
+									"",
+									"pm.collectionVariables.set(\"latestSignedS3SongUploadLink\", pm.response.json().uploadUrl)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{dm_baseUrl}}/mixtapes/{{latestCreatedMixtapeId}}/songs/{{latestCreatedSongId}}/upload-url",
+							"host": [
+								"{{dm_baseUrl}}"
+							],
+							"path": [
+								"mixtapes",
+								"{{latestCreatedMixtapeId}}",
+								"songs",
+								"{{latestCreatedSongId}}",
+								"upload-url"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload song",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "78f9cc5f-c8b3-41cb-a85f-ca0350a6318d",
+								"exec": [
+									"pm.test(\"Correct response code\", () => { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": "/home/stefan/Desktop/passfotos-kyara3.jpg"
+							}
+						},
+						"url": {
+							"raw": "{{latestSignedS3SongUploadLink}}",
+							"host": [
+								"{{latestSignedS3SongUploadLink}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get mixtape with songs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a54e6431-1729-4a44-9825-63a743dc2945",
+								"exec": [
+									"pm.test(\"Correct response code\", () => { pm.response.to.have.status(200); });",
+									"",
+									"pm.test(\"Validate schema\", () => {",
+									"    pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"getMixtapeWithSongsSchema\")));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dm_baseUrl}}/mixtapes/{{latestCreatedMixtapeId}}/songs",
+							"host": [
+								"{{dm_baseUrl}}"
+							],
+							"path": [
+								"mixtapes",
+								"{{latestCreatedMixtapeId}}",
+								"songs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete song",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3717d205-b748-4264-8176-7bc0297b97c7",
+								"exec": [
+									"pm.test(\"Correct response code\", () => { pm.response.to.have.status(204); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{dm_baseUrl}}/mixtapes/{{latestCreatedMixtapeId}}/songs/{{latestCreatedSongId}}",
+							"host": [
+								"{{dm_baseUrl}}"
+							],
+							"path": [
+								"mixtapes",
+								"{{latestCreatedMixtapeId}}",
+								"songs",
+								"{{latestCreatedSongId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{dm_authToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "5afdf9fd-28dd-4e60-9c2e-8649f9181919",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "74a6779d-361a-45f8-856e-dc83116ee765",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "95a37f9a-9300-4328-8b82-c124fb40ca24",
+			"key": "dm_baseUrl",
+			"value": "https://8c1tzeu809.execute-api.eu-west-1.amazonaws.com/dev",
+			"type": "string"
+		},
+		{
+			"id": "69899544-782b-440d-bfb7-0600f6ed4e36",
+			"key": "dm_authToken",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjE3WmRvTmlWVmdfb1dHanc3WEhkRCJ9.eyJuaWNrbmFtZSI6InN0ZWZhbiIsIm5hbWUiOiJzdGVmYW5AbW9kdWwxLmRlIiwicGljdHVyZSI6Imh0dHBzOi8vcy5ncmF2YXRhci5jb20vYXZhdGFyLzA5MTg2MDhjODIwNjNiMDA1Y2E3MThlZjZjNjcwMDFiP3M9NDgwJnI9cGcmZD1odHRwcyUzQSUyRiUyRmNkbi5hdXRoMC5jb20lMkZhdmF0YXJzJTJGc3QucG5nIiwidXBkYXRlZF9hdCI6IjIwMjAtMDYtMDVUMTk6MDU6NDAuODA4WiIsImVtYWlsIjoic3RlZmFuQG1vZHVsMS5kZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaXNzIjoiaHR0cHM6Ly9kaWdpLW1peHRhcGVzLmV1LmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZWRhOTc4NDM0NDEzNzAwMTQ5N2RiMzgiLCJhdWQiOiJaU296TGcySUtOa0Y5a0F2THFRb3JkNmo1eVdQdFc5TCIsImlhdCI6MTU5MTM4Mzk0MiwiZXhwIjoxNTkxNzQzOTQyfQ.fmNzPUg55opTUbF4w0UO53vNkI3Iks3LY0qx7Hj_BwYj8HoVxnRsdsa21s8RYnzkmOta_EPmTgCaQdb0grErja_cqu1YdMAbxYQlfpGJnADoDTf3GLBkfrN4eVtIpJttgx7Q10EkRJkLyAG6fytjqNy-S__HcMPEg19Ya8os1_IHg9ZEMbEK5ZZVVlz1GVfWUlQxB8AoVLjh4KvdzQWVPqkjEQTKaWpxUu5GZHQm98wzjOotyTVHzbeOrlvRbVt2eCL8rgvWgr0pkQ4QdioxVW6ryK_DsCSzOMpeQ0okSi6bJ3jsNMOicYqeQJjxgA2bHiJiXdqFgSo6lRc9L1L3tw",
+			"type": "string"
+		},
+		{
+			"id": "c6c44d96-8302-4803-a9ee-3399541b9c8d",
+			"key": "dm_authTokenForSecondUser",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjE3WmRvTmlWVmdfb1dHanc3WEhkRCJ9.eyJuaWNrbmFtZSI6InN0ZWZhbiIsIm5hbWUiOiJzdGVmYW5AdHJpcC5tZSIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci9jMDBjYzkyYzMxNDY0MTZlNTJlNGE2ZDZmMzg0YWQxMD9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRnN0LnBuZyIsInVwZGF0ZWRfYXQiOiIyMDIwLTA2LTA2VDIyOjA4OjI1LjA4MloiLCJlbWFpbCI6InN0ZWZhbkB0cmlwLm1lIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJpc3MiOiJodHRwczovL2RpZ2ktbWl4dGFwZXMuZXUuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVlZGMxM2Q4MzQ0MTM3MDAxNDk4N2UwMiIsImF1ZCI6IlpTb3pMZzJJS05rRjlrQXZMcVFvcmQ2ajV5V1B0VzlMIiwiaWF0IjoxNTkxNDgxMzA1LCJleHAiOjE1OTE4NDEzMDV9.pOvmHqgj-zfr0GIxxVxKaHJbCMkuUPjRavwhqr1b0MMGgR3KsF643M-DjubEOp20aCNSVZ3VffFcZMQgBHU3iULeFyark0-isKZ3mqho002vIqgUN4ZvcjQgkpp-6t_1qUVWiZlxTcP7VCp5EyjoU3Qht2Mb7ialDCr9QbgjaX53ES1zzAUyvO5zOBtIj0UgoE8r-4aemNTdAhDB6-ztQjiugV_GLtz6g7rg7rPgyRBzvm_0zRrLZZuDCH68jVJhyrHyLXaiLDkbozK4NGrRoqEn04kNiOhtmNVTHbQIx0dPJ8EmLgHEdFECD8p2eAb7aJdR5TB0hP4rfNbNypmszg",
+			"type": "string"
+		},
+		{
+			"id": "b4247d77-2231-490f-b966-dddf1d879906",
+			"key": "latestCreatedMixtapeId",
+			"value": "MR|40583b82-ff5c-4a40-bd6b-5c46793a6c57",
+			"type": "string"
+		},
+		{
+			"id": "f00fc123-e454-480a-9715-0acdc77c3149",
+			"key": "latestCreatedSongId",
+			"value": "SR|93b8f326-1b5e-411f-9aa9-fce3c23d83d9",
+			"type": "string"
+		},
+		{
+			"id": "d2de544f-88cb-4a1b-958e-41ec8e2b0b52",
+			"key": "latestSignedS3SongUploadLink",
+			"value": "https://serverless-digi-mixtapes-app-93165037-dev.s3.eu-west-1.amazonaws.com/SR%7C93b8f326-1b5e-411f-9aa9-fce3c23d83d9?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAYCWYUXXA2KUBX6G2%2F20200607%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20200607T015358Z&X-Amz-Expires=300&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEGIaCWV1LXdlc3QtMSJHMEUCIQDNeAk1OJgKjACfhsSrTXwE2Z4WfaCXHHrp78ev%2BeqgkAIgLdLFvBp%2Bl4ApasVQmQFkCwrs4aq9HlIvRjjzQS2XNmwq8QEIy%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw1NTU1Nzg4NjcxMzciDIeQXhf7IdfB6caoQSrFAV3BJV0j1rRozZRMZK6BhYxl%2FvrmsazFkcJR%2FINmw1ZQlyHqzWhsrwUUcIyVPRdh4isc%2B1%2F%2B2Fj2ZdVJWnKzIPAuwTB%2BplWnLnwNhre2fdMVBJ4Zrwu3wBGKxXoTScpp5rjV8KL97t9H8W6LfY4cTJXDNIV64hM0qdkqCm58DkyTihR3Luo7fbM3nCGvj%2B0bpn%2BIBJrkMv7Mh4s5WwnD1twmeEIPFq9uPDNV64DHV9zHkEtT6uARBy2bI7kHpWPCAoqcfBDFMLSR8fYFOuABD6ymMETlsql%2FnIPYB792MVRbbzALn0qZezpgx1IQIMwYj3XaCJTHxmKJcI3T8mPQpjjrDdzAaU7cnvqrU0R2Wh6CyzWWhcYkxwdRU4upgVSSYqz4SRbIJ5xAez%2FA6sEe63djQj%2BKbzX3WTaB8KvOO23MPWklBSXDVGHPbvn9FFHiZ8fD1poKxaOkMmOyAZ0HB5BkPIuVO7l%2FFFjSbrip7dlQCfWbHx5We9WyLjv5y0QNH3XgD1gYMB5fDj4n0p%2BBKuhjlQPVwdV%2FlbHCEu818wXERNuGP7XV6N%2Fpvr9fKnY%3D&X-Amz-Signature=a8f8f4d7eef906f194ed006bf7de69cbad84fe24385877d9701e0fad74dc6af9&X-Amz-SignedHeaders=host",
+			"type": "string"
+		},
+		{
+			"id": "269f3106-0ccf-4c81-9999-4057144ae33f",
+			"key": "createdMixtapeSchema",
+			"value": "{\n    \"type\": \"object\",\n    \"properties\": {\n        \"item\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"name\": {\"type\": \"string\"},\n                \"creatorUserId\": {\"type\": \"string\"},\n                \"mixtapeId\": {\"type\": \"string\"},\n                \"type\": {\"type\": \"string\"},\n                \"createdAt\": {\"type\": \"string\"},\n                \"mixtapeIdSongId\": {\"type\": \"string\"},\n                \"mixtapeIdTypeSongCreatedAt\": {\"type\": \"string\"},\n                \"typeMixtapeCreatedAtSongCreatedAt\": {\"type\": \"string\"}\n            },\n            \"required\": [\n                \"name\",\n                \"creatorUserId\",\n                \"mixtapeId\",\n                \"type\",\n                \"createdAt\",\n                \"mixtapeIdSongId\",\n                \"mixtapeIdTypeSongCreatedAt\",\n                \"typeMixtapeCreatedAtSongCreatedAt\"\n            ]\n        }\n    },\n    \"required\": [\"item\"]\n}",
+			"type": "string"
+		},
+		{
+			"id": "7287f4d2-679f-4d27-8a8e-c4be77997e57",
+			"key": "createdSongSchema",
+			"value": "{\n    \"type\": \"object\",\n    \"properties\": {\n        \"item\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"name\": {\"type\": \"string\"},\n                \"creatorUserId\": {\"type\": \"string\"},\n                \"mixtapeId\": {\"type\": \"string\"},\n                \"songId\": {\"type\": \"string\"},\n                \"type\": {\"type\": \"string\"},\n                \"createdAt\": {\"type\": \"string\"},\n                \"mixtapeIdSongId\": {\"type\": \"string\"},\n                \"mixtapeIdTypeSongCreatedAt\": {\"type\": \"string\"},\n                \"typeMixtapeCreatedAtSongCreatedAt\": {\"type\": \"string\"}\n            },\n            \"required\": [\n                \"name\",\n                \"creatorUserId\",\n                \"mixtapeId\",\n                \"songId\",\n                \"type\",\n                \"createdAt\",\n                \"mixtapeIdSongId\",\n                \"mixtapeIdTypeSongCreatedAt\",\n                \"typeMixtapeCreatedAtSongCreatedAt\"\n            ]\n        }\n    },\n    \"required\": [\"item\"]\n}",
+			"type": "string"
+		},
+		{
+			"id": "5702b2b9-3daa-48df-8f86-656cee5a8094",
+			"key": "getMixtapesSchema",
+			"value": "{\n    \"type\": \"object\",\n    \"properties\": {\n        \"items\": {\n            \"type\": \"array\"\n        }\n    },\n    \"required\": [\"items\"]\n}",
+			"type": "string"
+		},
+		{
+			"id": "2fbbb681-f150-460a-98e6-9be174801017",
+			"key": "getMixtapeWithSongsSchema",
+			"value": "{\n    \"type\": \"object\",\n    \"properties\": {\n        \"mixtape\": { \"type\": \"object\" },\n        \"mixtapeSongs\": { \"type\": \"array\" }\n    },\n    \"required\": [\"mixtape\", \"mixtapeSongs\"]\n}",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
 }

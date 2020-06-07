@@ -11,7 +11,7 @@ const logger = createLogger('lambda:updateMixtape')
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.debug('Processing event: ', event)
 
-  const mixtapeId = event.pathParameters.mixtapeId
+  const mixtapeId = decodeURI(event.pathParameters.mixtapeId)
   const jwtToken = getTokenFromAuthHeader(event.headers.Authorization)
   const updatedMixtape: UpdateMixtapeRequest = JSON.parse(event.body)
 

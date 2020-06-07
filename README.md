@@ -42,11 +42,21 @@ This repository contains the backend part of the application.
 ## 2.3 Testing
 As there is no front-end implementation in this repository, the API can be tested with [Postman](https://www.postman.com/downloads/). 
 
-The [Postman collection](./Digi-Mixtapes-API.postman_collection.json) contains sample requests for all relevant API calls. There are two collection variables defined:
-- **baseUrl**: `https://<api-id>.execute-api.<region>.amazonaws.com/dev/` - the initial value is already set for the currently deployed app on AWS
-- **authToken**: the JWT token required for all API calls - the initial value is already set with a valid token for an example user; for obtaining a new JWT token, see 2.3.1
+### 2.3.1 Running the Postman Collection
+There is a [Postman collection](./Digi-Mixtapes-API.postman_collection.json) which contains mixtape and song related sample requests for relevant API calls including tests that can be run for the whole collection.
+ 
+ **Environment Variables**  
+There are three variables set on collection level which would normally be defined as environment variables. However, for simplicity they are set as collection variables. This way, the collection can be run directly after import into Postman, without setting any more variables manually.
 
-### 2.3.1 Obtaining New JWT Token
+- **dm_baseUrl**: `https://<api-id>.execute-api.<region>.amazonaws.com/dev` The digi mixtapes api gateway url
+- **dm_authToken**: the JWT token required for all API calls - the initial value is already set with a valid token for an example user 1; for obtaining a new JWT token, see 2.3.2
+- **dm_authTokenForSecondUser**: same as above but for a different user in order to test whether mixtapes from user 1 would show up for user 2
+
+**Collection Variables**    
+Some collection variables (that store ids) allow to add songs for recently created mixtapes or delete these, other variables allow for testing responses against json schemas stored in collection variables.
+
+
+### 2.3.2 Obtaining New JWT Token
 Without a front-end implementation in this repository which would allow a user to login and obtain a JWT token in the browser, we need to login and obtain a JWT token in a different way. Postman allows for using OAuth2 authorization with identity providers (the Digi Mixtapes app uses Auth0). To obtain a new JWT token authenticating with Auth0 go through these steps:
 
 - Edit the Postman Digi Mixtapes collection by clicking the three dots and Edit  
@@ -71,8 +81,12 @@ Without a front-end implementation in this repository which would allow a user t
   ![](img/postman-3-request-token.png)
 - Copy the **id_token**, which is the JWT token
 - Close the small window
-- Set the type back from **OAuth 2.0** to **Bearer Token**
-- Go to Variables and update the current value of authToken with the copied JWT token
+- Cancel to close the collection edit window
+
+To set the token in the environment variables:
+
+- Edit the Postman Digi Mixtapes collection by clicking the three dots and Edit  
+- Go to Variables and update the current value of authToken or authTokenForSecondUser with the copied JWT token
 
 
 # 3 Installing & Running The App
